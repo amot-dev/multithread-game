@@ -4,8 +4,6 @@
 #include "board.h"
 
 int main(){
-    std::pair<int,int> position = std::make_pair(0,0);
-    Board gameBoard(position);
-    //gameBoard.printBoard();
+    Board gameBoard(std::make_pair(0,0));
     return 0;
 }

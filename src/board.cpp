@@ -5,12 +5,15 @@
 
 Board::Board(std::pair<int,int> position){
     board.emplace(position, generateTile(position));
+    std::cout << board.size();
 }
 
 Board::~Board(){}
 
 Board::Tile Board::generateTile(std::pair<int,int> coordinates){
-    
+    Tile generated;
+    generated.biome = tileGen.plains;
+    return generated;
 }
 
 int Board::determineBiomeForNewTile(std::pair<int, int> coordinates){

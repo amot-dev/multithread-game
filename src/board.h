@@ -22,7 +22,7 @@ class Board{
             mountains
         };
         /** Defines some useful values used in tile generation */
-        std::map<int,double> biomeChances = {
+        const std::map<int,double> biomeChances = {
             {plains,0.3},
             {forest,0.2},
             {ocean,0.2},
