@@ -41,6 +41,11 @@ class Board{
     Tile generateTile(std::pair<int, int> coordinates);
 
     /** Determine the biome for a new tile
+    * 
+    * This function implements an algorithm I designed to try and avoid having
+    * too many small biomes. The algorithm looks at nearby tiles and changes the
+    * biome generation probabilities based on what biomes are around the current
+    * tile. This enables biomes to be less fractured.
     *
     * @param coordinates x,y pair of coordinates
     * @return Biome to be used for new tile
@@ -49,13 +54,22 @@ class Board{
 
     /** Get weight of biome from nearby occurences
     *
-    * This value is used to find the probability of generating each biome
+    * This value is used to find the probability of generating each biome.
     * 
     * @param biome Biome name
     * @param nearbyOccurences Number of occurences around the current coordinates
     * @return Weighted value for biome generation
     */
     double getBiomeWeight(int biome, int nearbyOccurences);
+
+    /** Calculate probability of selecting biome
+    * 
+    * @param biomeWeight Biome weight
+    * @param sumOfRelativeWeights Sum of relative weights from all biomes
+    * @param referenceWeight Biome weight chosen for reference
+    * @return Probability this biome will be selected
+    */
+    double calculateBiomeProbability(double biomeWeight, double sumOfRelativeWeights, double referenceWeight);
 
     /** Check if the given coordinates contain a generated tile
     *
