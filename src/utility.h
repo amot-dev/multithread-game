@@ -3,6 +3,13 @@
 
 #include <map>
 
+/** Generates a random integer between min and max
+    *
+    * @param min Smallest possible return value
+    * @param max Largest possible return value
+    */
+    int randInt(int min, int max);
+
 /** Pick a key from the map based on a probability value
 *
 * @param map Map to pick from

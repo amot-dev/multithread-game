@@ -5,7 +5,7 @@
 
 int main(){
     std::pair position = std::make_pair(0,0);
-    Board gameBoard(position);
+    Board gameBoard(25);
     gameBoard.printBoard(position);
     return 0;
 }

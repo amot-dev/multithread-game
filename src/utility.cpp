@@ -1,6 +1,10 @@
 #include "utility.h"
 #include <ctime>
 
+int randInt(int min, int max){
+    return rand() % max + min;
+}
+
 int pickByProbability(std::map<int, double> map){
     double totalVal = 0;
     for (auto const& [key, val] : map) {
