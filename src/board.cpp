@@ -66,6 +66,7 @@ void Board::printBoard(std::pair<int,int> position){
     for (int i = (position.first - viewSize/2); i <= (position.first + viewSize/2); i++){
         for (int j = (position.second - viewSize/2); j <= (position.second + viewSize/2); j++){
             std::pair coordinates = std::make_pair(i,j);
+            if (!tileExists(coordinates)) throw TileMissingException();
             if (coordinates == position) std::cout << "@  ";
             else printTile(board.at(coordinates));
         }
