@@ -5,8 +5,13 @@
 #include "exceptions.h"
 
 Board::Board(std::pair<int,int> position){
-    board.emplace(position, generateTile(position));
-    //TODO
+    srand(time(0));
+    for (int i = (position.first - viewSize/2); i <= (position.first + viewSize/2); i++){
+        for (int j = (position.second - viewSize/2); j <= (position.second + viewSize/2); j++){
+            std::pair coordinates = std::make_pair(i,j);
+            board.emplace(coordinates, generateTile(coordinates));
+        }
+    }
 }
 
 Board::~Board(){}
@@ -56,5 +61,16 @@ bool Board::tileExists(std::pair<int,int> coordinates){
 }
 
 void Board::printBoard(std::pair<int,int> position){
-    //TODO
+    for (int i = (position.first - viewSize/2); i <= (position.first + viewSize/2); i++){
+        for (int j = (position.second - viewSize/2); j <= (position.second + viewSize/2); j++){
+            std::pair coordinates = std::make_pair(i,j);
+            if (coordinates == position) std::cout << "@  ";
+            else printTile(board.at(coordinates));
+        }
+        std::cout << std::endl;
+    }
+}
+
+void Board::printTile(Board::Tile tile){
+    std::cout << tileGen.biomeChars.at(tile.biome) << "  ";
 }

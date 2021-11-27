@@ -4,7 +4,8 @@
 #include "board.h"
 
 int main(){
-    srand(time(0));
-    Board gameBoard(std::make_pair(0,0));
+    std::pair position = std::make_pair(0,0);
+    Board gameBoard(position);
+    gameBoard.printBoard(position);
     return 0;
 }

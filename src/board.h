@@ -4,7 +4,7 @@
 #include <map>
 /** Generates and manages the game board  */ 
 class Board{
-    const unsigned viewableBoardSize = 21;
+    const int viewSize = 21;
 
     /** Contains all information relating to a tile */
     struct Tile{
@@ -28,6 +28,14 @@ class Board{
             {ocean,0.2},
             {desert,0.15},
             {mountains,0.15}
+        };
+        /** Defines the display characters for each biome */
+        const std::map<int,char> biomeChars = {
+            {plains,'.'},
+            {forest,'&'},
+            {ocean,'~'},
+            {desert,'#'},
+            {mountains,'^'}
         };
     };
     TileGen tileGen;
@@ -67,6 +75,12 @@ class Board{
     * @return Whether or not the specified coordinates contain a generated tile
     */
     bool tileExists(std::pair<int,int> coordinates);
+
+    /** Print the given tile
+    *
+    * @param tile Tile to print
+    */
+    void printTile(Tile tile);
 
 public:
     /** Build new board centered at position
