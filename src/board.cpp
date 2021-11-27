@@ -6,6 +6,7 @@
 
 Board::Board(std::pair<int,int> position){
     srand(time(0));
+    //MODIFY TO GENERATE IN SPIRAL
     for (int i = (position.first - viewSize/2); i <= (position.first + viewSize/2); i++){
         for (int j = (position.second - viewSize/2); j <= (position.second + viewSize/2); j++){
             std::pair coordinates = std::make_pair(i,j);
@@ -52,7 +53,7 @@ int Board::determineBiomeForNewTile(std::pair<int, int> coordinates){
 }
 
 double Board::getBiomeWeight(int biome, int nearbyOccurences){
-    return (1 - pow(1-tileGen.biomeChances.at(biome),nearbyOccurences+1));
+    return (1 - pow(1-tileGen.biomeChances.at(biome),nearbyOccurences+(1/(double)tileGen.biomeCohesivenessFactor)));
 }
 
 bool Board::tileExists(std::pair<int,int> coordinates){

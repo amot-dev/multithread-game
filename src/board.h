@@ -21,6 +21,8 @@ class Board{
             desert,
             mountains
         };
+        /** Defines how big biomes are */
+        const int biomeCohesivenessFactor = 3;
         /** Defines some useful values used in tile generation */
         const std::map<int,double> biomeChances = {
             {plains,0.3},
