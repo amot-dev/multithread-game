@@ -2,35 +2,7 @@
 #define BOARD
 
 #include <map>
-
-/** Contains all information relating to a tile */
-struct Tile{
-    bool ready = false;
-    int biome;
-};
-/** Defines some useful values used in tile generation */
-struct TileGen{
-    /** Names of all biomes currently used*/
-    enum biomes {
-        plains,
-        forest,
-        ocean,
-        desert,
-        mountains
-    };
-    /** Defines minimum biome size */
-    const int minBiomeSize = 2;
-    /** Defines max biome size */
-    const int maxBiomeSize = 5;
-    /** Defines some useful values used in tile generation */
-    const std::map<int,double> biomeChances = {
-        {plains,0.25},
-        {forest,0.35},
-        {ocean,0.2},
-        {desert,0.1},
-        {mountains,0.1}
-    };
-};
+#include "tile.h"
 
 /** Generates and manages the game board  */ 
 class Board{
@@ -70,6 +42,13 @@ class Board{
     * @return Whether or not the specified coordinates contain a generated tile
     */
     bool tileExists(std::pair<int,int> coordinates) const;
+
+    /** Check if the given coordinates contain a ready tile
+    *
+    * @param coordinates x,y pair of coordinates
+    * @return Whether or not the specified coordinates contain a ready tile
+    */
+    bool tileReady(std::pair<int,int> coordinates) const;
 
 public:
     /** Build new board centered at 0,0

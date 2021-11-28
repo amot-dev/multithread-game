@@ -2,6 +2,7 @@
 #define INTERFACE
 
 #include "board.h"
+#include "tile.h"
 
 class Interface{
     TileGen tileGen;
@@ -33,7 +34,7 @@ public:
     *
     * @param position Player position
     */
-    void printGame(const Board &board, std::pair<int,int> position);
+    void printGame(const Board &board, std::pair<int,int> position) const;
 };
 
 #endif

@@ -39,9 +39,8 @@ void Board::generateTile(std::pair<int,int> coordinates){
 
 void Board::generateBiome(std::pair<int,int> coordinates){
     if (tileExists(coordinates)) return;
-    Tile tile;
     int biome = pickByProbability(tileGen.biomeChances);
-    tile.biome = biome;
+    Tile tile = Tile(biome);
     std::pair biomeSize = std::make_pair(randInt(tileGen.minBiomeSize,tileGen.maxBiomeSize),randInt(tileGen.minBiomeSize,tileGen.maxBiomeSize));
 
     if (!tileExists(std::make_pair(coordinates.first+1,coordinates.second-1))) coordinates.first += biomeSize.first;
@@ -49,8 +48,8 @@ void Board::generateBiome(std::pair<int,int> coordinates){
     else if (!tileExists(std::make_pair(coordinates.first,coordinates.second+1))) coordinates.second += biomeSize.second;
     else if (!tileExists(std::make_pair(coordinates.first-1,coordinates.second))) coordinates.first -= biomeSize.first;
     else {
-        tile.biome = board.at(std::make_pair(coordinates.first-1, coordinates.second)).biome;
-        board.emplace(coordinates, tile);
+        Tile adjacentTile = Tile(board.at(std::make_pair(coordinates.first-1, coordinates.second)).getBiome());
+        board.emplace(coordinates, adjacentTile);
     }
     
     int y = tileGen.minBiomeSize;
@@ -68,4 +67,9 @@ void Board::generateBiome(std::pair<int,int> coordinates){
 bool Board::tileExists(std::pair<int,int> coordinates) const {
     if (board.find(coordinates) == board.end()) return false;
     else return true;
+}
+
+bool Board::tileReady(std::pair<int,int> coordinates) const {
+    if (!tileExists(coordinates)) return false;
+    return board.at(coordinates).isReady();
 }
