@@ -1,11 +1,10 @@
-#include <iostream>
-#include <string>
-#include <thread>
 #include "board.h"
+#include "interface.h"
 
 int main(){
     std::pair position = std::make_pair(0,0);
-    Board gameBoard(25);
-    gameBoard.printBoard(position);
+    Interface interface;
+    Board board(26);
+    interface.printGame(board, position);
     return 0;
 }

@@ -1,5 +1,5 @@
-OBJS	= main.o utility.o board.o
-SOURCE	= main.cpp utility.cpp board.cpp
+OBJS	= main.o utility.o interface.o board.o
+SOURCE	= main.cpp utility.cpp interface.o board.cpp
 OUT	    = multi
 CC	    = g++
 FLAGS	= -g -c -std=c++17
@@ -12,6 +12,9 @@ main.o: main.cpp
 
 utility.o: utility.cpp
 		$(CC) $(FLAGS) utility.cpp
+
+interface.o: interface.cpp
+		$(CC) $(FLAGS) interface.cpp
 
 board.o: board.cpp
 		$(CC) $(FLAGS) board.cpp

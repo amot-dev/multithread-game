@@ -1,5 +1,4 @@
 #include "board.h"
-#include <iostream>
 #include <cmath>
 #include "utility.h"
 #include "exceptions.h"
@@ -15,6 +14,15 @@ Board::Board(int seed){
 }
 
 Board::~Board(){}
+
+int Board::getViewSize() const {
+    return viewSize;
+}
+
+Tile Board::getTile(std::pair<int,int> coordinates) const {
+    if (!tileExists(coordinates)) throw TileMissingException();
+    return board.at(coordinates);
+}
 
 void Board::generateBoard(){
     for (int i = -viewSize/2; i <= viewSize/2; i++){
@@ -57,23 +65,7 @@ void Board::generateBiome(std::pair<int,int> coordinates){
     }
 }
 
-bool Board::tileExists(std::pair<int,int> coordinates){
+bool Board::tileExists(std::pair<int,int> coordinates) const {
     if (board.find(coordinates) == board.end()) return false;
     else return true;
-}
-
-void Board::printBoard(std::pair<int,int> position){
-    for (int i = (position.first - viewSize/2); i <= (position.first + viewSize/2); i++){
-        for (int j = (position.second - viewSize/2); j <= (position.second + viewSize/2); j++){
-            std::pair coordinates = std::make_pair(i,j);
-            if (!tileExists(coordinates)) throw TileMissingException();
-            if (coordinates == position) std::cout << "@  ";
-            else printTile(board.at(coordinates));
-        }
-        std::cout << std::endl;
-    }
-}
-
-void Board::printTile(Board::Tile tile){
-    std::cout << tileGen.biomeChars.at(tile.biome) << "  ";
 }
