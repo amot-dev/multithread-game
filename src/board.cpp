@@ -64,6 +64,24 @@ void Board::generateBiome(std::pair<int,int> coordinates){
     }
 }
 
+void Board::generateFeature(std::pair<int,int> coordinates){
+    int feature = 0;
+    if (pickValue(featGen.featureChance)) feature = pickByProbability(featGen.featureChances);
+
+    if (feature == featGen.city){
+        int districts = randInt(featGen.minCityDistricts, featGen.maxCityDistricts);
+        if (districts > 1){
+            std::vector coordinatesInRadius = getCoordinatesInRadius(coordinates, 1);
+            for (auto& here : coordinatesInRadius){
+                if (!tileExists(here)) generateBiome(here); //potentially dangerous line!!! could cause infinite world gen
+                if (getTile(here).getBiome() == tileGen.ocean){
+                    //search for nearby oceans
+                }
+            }
+        }
+    }
+}
+
 bool Board::tileExists(std::pair<int,int> coordinates) const {
     if (board.find(coordinates) == board.end()) return false;
     else return true;
@@ -72,4 +90,15 @@ bool Board::tileExists(std::pair<int,int> coordinates) const {
 bool Board::tileReady(std::pair<int,int> coordinates) const {
     if (!tileExists(coordinates)) return false;
     return board.at(coordinates).isReady();
+}
+
+std::vector<std::pair<int,int>> Board::getCoordinatesInRadius(std::pair<int,int> coordinates, int radius) const {
+    std::vector<std::pair<int,int>> coordinatesInRadius;
+    coordinatesInRadius.reserve(radius*radius);
+    for (int i = coordinates.first - radius; i <= coordinates.first + radius; i++){
+        for (int j = coordinates.second - radius; j <= coordinates.second + radius; j++){
+            coordinatesInRadius.push_back(std::make_pair(i,j));
+        }
+    }
+    return coordinatesInRadius;
 }

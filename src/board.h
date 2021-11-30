@@ -2,12 +2,20 @@
 #define BOARD
 
 #include <map>
+#include <vector>
 #include "tile.h"
+
+/** Construct used to contain all data related to a path between two tiles */
+struct Path{
+    int tiles;
+    int travelCost;
+};
 
 /** Generates and manages the game board  */ 
 class Board{
     const int viewSize = 15;
     TileGen tileGen;
+    FeatureGen featGen;
     std::map<std::pair<int,int>, Tile> board;
 
     /** Generates the board on first load
@@ -36,6 +44,17 @@ class Board{
     */
     void generateBiome(std::pair<int, int> coordinates);
 
+    /** Generates feature at the given coordinates
+    * 
+    * For most features this is straightForward. Cities however
+    * are multi-tile and will sometimes overwrite nearby features
+    * or even generate new tiles for the rest of the city
+    * to generate.
+    *
+    * @param coordinates x,y pair of coordinates
+    */
+    void generateFeature(std::pair<int, int> coordinates);
+
     /** Check if the given coordinates contain a generated tile
     *
     * @param coordinates x,y pair of coordinates
@@ -49,6 +68,34 @@ class Board{
     * @return Whether or not the specified coordinates contain a ready tile
     */
     bool tileReady(std::pair<int,int> coordinates) const;
+
+    /** Generates a vector of coordinates in a radius around some coordinates
+    *
+    * @param coordinates x,y pair of coordinates
+    * @param radius Radius to look around
+    * @return A vector containing the requested coordinates
+    */
+    std::vector<std::pair<int,int>> getCoordinatesInRadius(std::pair<int,int> coordinates, int radius) const;
+
+    /** Generates a path between two coordinates on the board, up to a maximum distance
+    *
+    * @param position Starting position
+    * @param coordinates Ending Position
+    * @param maxDistance Maximum distance to search
+    * @return A path between the two coordinates
+    */
+    Path pathTo(std::pair<int,int> position, std::pair<int,int> coordinates, int maxDistance) const;
+
+    /** Generates a path between a starting coordinates and some tile, up to a maximum distance
+    *
+    * @param position Starting position
+    * @param biome Biome to look for (-1 to ignore)
+    * @param feature Feature to look for (-1 to ignore)
+    * @param maxDistance Maximum distance to search
+    * @param toSkip How many occurences to ignore before "finding" tile
+    * @return A path between the starting coordinates and the nth matching tile, where n is toSkip + 1
+    */
+    Path pathTo(std::pair<int,int> position, int biome, int feature, int maxDistance, int toSkip) const;
 
 public:
     /** Build new board centered at 0,0

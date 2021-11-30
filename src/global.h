@@ -4,6 +4,6 @@
 #include "safequeue.h"
 
 /** Safe Queue for status to be displayed alongside board */
-SafeQueue statusRows;
+inline SafeQueue statusRows;
 
 #endif
