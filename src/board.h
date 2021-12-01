@@ -7,8 +7,9 @@
 
 /** Construct used to contain all data related to a path between two tiles */
 struct Path{
-    int tiles;
-    int travelCost;
+    int tiles = 0;
+    int travelCost = 0;
+    std::vector<std::pair<int,int>> steps;
 };
 
 /** Generates and manages the game board  */ 
@@ -77,25 +78,29 @@ class Board{
     */
     std::vector<std::pair<int,int>> getCoordinatesInRadius(std::pair<int,int> coordinates, int radius) const;
 
-    /** Generates a path between two coordinates on the board, up to a maximum distance
-    *
-    * @param position Starting position
-    * @param coordinates Ending Position
-    * @param maxDistance Maximum distance to search
-    * @return A path between the two coordinates
-    */
-    Path pathTo(std::pair<int,int> position, std::pair<int,int> coordinates, int maxDistance) const;
-
     /** Generates a path between a starting coordinates and some tile, up to a maximum distance
+    * 
+    * Uses a BFS algorithm to find the shortest path between two tiles. If both biome and feature are -1,
+    * the algorithm searches by coordinates. Otherwise it tries to match biome and/or feature.
     *
-    * @param position Starting position
+    * @param start Starting position
     * @param biome Biome to look for (-1 to ignore)
     * @param feature Feature to look for (-1 to ignore)
-    * @param maxDistance Maximum distance to search
-    * @param toSkip How many occurences to ignore before "finding" tile
+    * @param ignoreTravelCost Whether or not to ignore travel cost
+    * @param maxDistance Maximum distance to search (implemented as tiles or distance depending on ignoreTravelCost)
+    * @param toSkip How many matches to ignore (does nothing if coordinates specified)
+    * @param end End position (if coordinates are known)
     * @return A path between the starting coordinates and the nth matching tile, where n is toSkip + 1
     */
-    Path pathTo(std::pair<int,int> position, int biome, int feature, int maxDistance, int toSkip) const;
+    Path pathTo(
+        std::pair<int,int> start,
+        int biome,
+        int feature,
+        bool ignoreTravelCost,
+        int maxDistance,
+        int toSkip,
+        std::pair<int,int> end
+    ) const;
 
 public:
     /** Build new board centered at 0,0

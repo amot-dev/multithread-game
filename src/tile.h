@@ -92,6 +92,12 @@ public:
     */
     int getFeature() const;
 
+    /** Return the travel cost of the tile
+    *
+    * @return Travel cost
+    */
+    int getTravelCost() const;
+
     /** Return the ready status of the tile
     *
     * @return Ready status

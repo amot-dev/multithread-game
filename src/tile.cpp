@@ -8,4 +8,6 @@ void Tile::setFeature(int newFeature){feature = newFeature;}
 
 int Tile::getFeature() const {return feature;}
 
+int Tile::getTravelCost() const {return travelCost;}
+
 bool Tile::isReady() const {return ready;}

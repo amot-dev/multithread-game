@@ -1,5 +1,7 @@
 #include "board.h"
-#include <cmath>
+#include <queue>
+#include <unordered_set>
+#include <unordered_map>
 #include "utility.h"
 #include "exceptions.h"
 
@@ -101,4 +103,49 @@ std::vector<std::pair<int,int>> Board::getCoordinatesInRadius(std::pair<int,int>
         }
     }
     return coordinatesInRadius;
+}
+
+Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignoreTravelCost, int maxDistance, int toSkip, std::pair<int,int> end) const {
+    bool checkBiome = false;
+    bool checkFeature = false;
+    if (biome != -1) checkBiome = true;
+    if (feature != -1) checkFeature = true;
+    
+    std::queue<std::pair<int,int>> queue;
+    std::unordered_set<std::pair<int,int>, pair_hash> visited;
+    std::unordered_map<std::pair<int,int>, Path, pair_hash> map;
+
+    queue.push(start);
+    visited.insert(start);
+    map.emplace(start, Path());
+
+    int distanceTravelled = 0;
+    while(!queue.empty() && distanceTravelled <= maxDistance){
+        std::pair<int,int> previous = queue.front();
+        queue.pop();
+        for (auto& here : getCoordinatesInRadius(previous, 1)){
+            if (!visited.count(here)){
+                visited.insert(here);
+                if (tileExists(here)) queue.push(here);
+
+                Path path;
+                path.tiles = map.at(previous).tiles + 1;
+                path.travelCost = map.at(previous).travelCost + getTile(here).getTravelCost();
+                path.steps.push_back(here);
+                map.emplace(here, path);
+            }
+            if (!checkBiome && !checkFeature && here == end) return map.at(here);
+
+            bool match = false;
+            if (checkBiome && getTile(here).getBiome() == biome) match = true;
+            if (checkFeature && getTile(here).getFeature() != feature) match = false;
+            if (match) return map.at(here);
+        }
+        map.erase(previous);
+        distanceTravelled++;
+    }
+    Path path;
+    path.tiles = -1;
+    path.travelCost = -1;
+    return path;
 }
