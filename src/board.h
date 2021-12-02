@@ -15,8 +15,6 @@ struct Path{
 /** Generates and manages the game board  */ 
 class Board{
     const int viewSize = 15;
-    TileGen tileGen;
-    FeatureGen featGen;
     std::map<std::pair<int,int>, Tile> board;
 
     /** Generates the board on first load

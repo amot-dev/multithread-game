@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include "utility.h"
 #include "exceptions.h"
+#include "global.h"
 
 Board::Board(){
     srand(time(0));
@@ -77,7 +78,7 @@ void Board::generateFeature(std::pair<int,int> coordinates){
             for (auto& here : coordinatesInRadius){
                 if (!tileExists(here)) generateBiome(here); //potentially dangerous line!!! could cause infinite world gen
                 if (getTile(here).getBiome() == tileGen.ocean){
-                    //search for nearby oceans
+                    //TODO: search for nearby oceans
                 }
             }
         }
@@ -126,7 +127,7 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
         for (auto& here : getCoordinatesInRadius(previous, 1)){
             if (!visited.count(here)){
                 visited.insert(here);
-                if (tileExists(here)) queue.push(here);
+                if (tileExists(here) && getTile(here).isTravellable()) queue.push(here);
 
                 Path path;
                 path.tiles = map.at(previous).tiles + 1;

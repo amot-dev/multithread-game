@@ -19,9 +19,16 @@ struct TileGen{
         {desert,0.1},
         {mountains,0.1}
     };
+    const std::map<int,int> biomeTravelCosts = {
+        {plains,2},
+        {forest,5},
+        {ocean,1000},
+        {desert,3},
+        {mountains,1000}
+    };
 };
 
-/** Defines some useful values used in tile generation */
+/** Defines some useful values used in feature generation */
 struct FeatureGen{
     /** Names of all features currently used */
     enum features {none, city, cityMarket, cityHarbour, cityGate, cityPlaza, cityArena, cityPrison, cityNeighbourhood,
@@ -98,11 +105,18 @@ public:
     */
     int getTravelCost() const;
 
+    /** Return whether or not the tile can be traversed
+    *
+    * @return Whether or not the tile can be traversed
+    */
+    bool isTravellable() const;
+
     /** Return the ready status of the tile
     *
     * @return Ready status
     */
     bool isReady() const;
+
 };
 
 #endif
