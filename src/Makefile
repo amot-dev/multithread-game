@@ -7,6 +7,13 @@ FLAGS	= -g -c -std=c++17
 all: $(OBJS)
 		$(CC) -o $(OUT) $(OBJS)
 
+test:
+		#build test file
+		./test
+
+clean:
+		rm -f $(OBJS) $(OUT)
+
 main.o: main.cpp
 		$(CC) $(FLAGS) main.cpp
 
@@ -21,6 +28,3 @@ board.o: board.cpp
 
 tile.o: tile.cpp
 		$(CC) $(FLAGS) tile.cpp
-
-clean:
-		rm -f $(OBJS) $(OUT)
