@@ -11,7 +11,7 @@ void Interface::setStatusSpacingAmount(int spacingAmount){
     for (int i = 0; i < statusSpacingAmount; i++) statusSpacing.append(" ");
 }
 
-void Interface::printGame(const Board &board, std::pair<int,int> position) const{
+void Interface::printGame(const Board& board, std::pair<int,int> position) const{
     int viewSize = board.getViewSize();
     for (int i = 0; i < 100; i++) std::cout << std::endl;
     for (int i = (position.first - viewSize/2); i <= (position.first + viewSize/2); i++){

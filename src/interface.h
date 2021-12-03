@@ -32,9 +32,10 @@ public:
 
     /** Prints a human-readable board
     *
+    * @param board Board to print
     * @param position Player position
     */
-    void printGame(const Board &board, std::pair<int,int> position) const;
+    void printGame(const Board& board, std::pair<int,int> position) const;
 };
 
 #endif

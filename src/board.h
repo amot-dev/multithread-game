@@ -7,14 +7,14 @@
 
 /** Construct used to contain all data related to a path between two tiles */
 struct Path{
-    int tiles = 0;
+    int tilesTraversed = 0;
     int travelCost = 0;
     std::vector<std::pair<int,int>> steps;
 };
 
 /** Generates and manages the game board  */ 
 class Board{
-    const int viewSize = 15;
+    static const int viewSize = 15;
     std::map<std::pair<int,int>, Tile> board;
 
     /** Generates the board on first load
@@ -76,6 +76,16 @@ class Board{
     */
     std::vector<std::pair<int,int>> getCoordinatesInRadius(std::pair<int,int> coordinates, int radius) const;
 
+    /** Generates a vector of coordinates adjacent some coordinates
+    *
+    * Here, diagonal connections are not considered adjacent since
+    * diagonal moves are not allowed
+    * 
+    * @param coordinates x,y pair of coordinates
+    * @return A vector containing the requested coordinates
+    */
+    std::vector<std::pair<int,int>> getAdjacentCoordinates(std::pair<int,int> coordinates) const;
+
     /** Generates a path between a starting coordinates and some tile, up to a maximum distance
     * 
     * Uses a BFS algorithm to find the shortest path between two tiles. If both biome and feature are -1,
@@ -99,6 +109,18 @@ class Board{
         int toSkip,
         std::pair<int,int> end
     ) const;
+
+    /** Implements travel cost comparison for tiles by coordinate */
+    class CompareTravelCost{
+    public:
+        /** Implements travel cost comparison for tiles by coordinate
+        *
+        * @param lhs The coordinate left of the operator
+        * @param rhs The coordinate right of the operator
+        * @return True if rhs > lhs
+        */
+        bool operator()(const std::pair<std::pair<int,int>,Path>& lhs, const std::pair<std::pair<int,int>,Path>& rhs) const;
+    };
 
 public:
     /** Build new board centered at 0,0
