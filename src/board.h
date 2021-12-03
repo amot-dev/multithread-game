@@ -86,30 +86,6 @@ class Board{
     */
     std::vector<std::pair<int,int>> getAdjacentCoordinates(std::pair<int,int> coordinates) const;
 
-    /** Generates a path between a starting coordinates and some tile, up to a maximum distance
-    * 
-    * Uses a BFS algorithm to find the shortest path between two tiles. If both biome and feature are -1,
-    * the algorithm searches by coordinates. Otherwise it tries to match biome and/or feature.
-    *
-    * @param start Starting position
-    * @param biome Biome to look for (-1 to ignore)
-    * @param feature Feature to look for (-1 to ignore)
-    * @param ignoreTravelCost Whether or not to ignore travel cost
-    * @param maxDistance Maximum distance to search (implemented as tiles or distance depending on ignoreTravelCost)
-    * @param toSkip How many matches to ignore (does nothing if coordinates specified)
-    * @param end End position (if coordinates are known)
-    * @return A path between the starting coordinates and the nth matching tile, where n is toSkip + 1
-    */
-    Path pathTo(
-        std::pair<int,int> start,
-        int biome,
-        int feature,
-        bool ignoreTravelCost,
-        int maxDistance,
-        int toSkip,
-        std::pair<int,int> end
-    ) const;
-
     /** Implements travel cost comparison for tiles by coordinate */
     class CompareTravelCost{
     public:
@@ -148,6 +124,30 @@ public:
     * @return Tile at coordinates
     */
     Tile getTile(std::pair<int,int> coordinates) const;
+
+    /** Generates a path between a starting coordinates and some tile, up to a maximum distance
+    * 
+    * Uses a BFS algorithm to find the shortest path between two tiles. If both biome and feature are -1,
+    * the algorithm searches by coordinates. Otherwise it tries to match biome and/or feature.
+    *
+    * @param start Starting position
+    * @param biome Biome to look for (-1 to ignore)
+    * @param feature Feature to look for (-1 to ignore)
+    * @param ignoreTravelCost Whether or not to ignore travel cost
+    * @param maxDistance Maximum distance to search (implemented as tiles or distance depending on ignoreTravelCost)
+    * @param toSkip How many matches to ignore (does nothing if coordinates specified)
+    * @param end End position (if coordinates are known)
+    * @return A path between the starting coordinates and the nth matching tile, where n is toSkip + 1
+    */
+    Path pathTo(
+        std::pair<int,int> start,
+        int biome,
+        int feature,
+        bool ignoreTravelCost,
+        int maxDistance,
+        int toSkip,
+        std::pair<int,int> end
+    ) const;
 };
 
 #endif
