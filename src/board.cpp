@@ -1,6 +1,8 @@
 #include "board.h"
 
+#include <algorithm>
 #include <queue>
+#include <random>
 #include <unordered_map>
 #include <unordered_set>
 #include "exceptions.h"
@@ -12,7 +14,7 @@ Board::Board(){
     generateBoard();
 }
 
-Board::Board(int seed){
+Board::Board(int seed) : seed(seed){
     srand(seed);
     generateBoard();
 }
@@ -28,7 +30,7 @@ Tile Board::getTile(std::pair<int,int> coordinates) const {
     return board.at(coordinates);
 }
 
-Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignoreTravelCost, int maxDistance, int toSkip, std::pair<int,int> end) const {
+Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignoreTravelCost, int maxDistance, int toSkip, std::pair<int,int> end = std::make_pair(0,0)) const {
     bool checkBiome = false;
     bool checkFeature = false;
     if (biome != -1) checkBiome = true;
@@ -37,8 +39,8 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
     std::queue<std::pair<int,int>> queue;
     std::priority_queue<std::pair<std::pair<int,int>, Path>,std::vector<std::pair<std::pair<int,int>, Path>>,CompareTravelCost> priorityQueue;
 
-    std::unordered_set<std::pair<int,int>, pair_hash> visited;
-    std::unordered_map<std::pair<int,int>, Path, pair_hash> map;
+    std::unordered_set<std::pair<int,int>, PairHash> visited;
+    std::unordered_map<std::pair<int,int>, Path, PairHash> map;
 
     if (ignoreTravelCost) queue.push(start);
     else priorityQueue.push(std::make_pair(start,Path()));
@@ -139,17 +141,52 @@ void Board::generateBiome(std::pair<int,int> coordinates){
 }
 
 void Board::generateFeature(std::pair<int,int> coordinates){
+    if (!getTile(coordinates).isTravellable()) return; //TEMPORARY (no features on ocean or mountains yet)
+
     int feature = 0;
     if (pickValue(featGen.featureChance)) feature = pickByProbability(featGen.featureChances);
+    if (feature != featGen.city) {
+        getTile(coordinates).setFeature(feature);
+        return;
+    }
 
-    if (feature == featGen.city){
-        int districts = randInt(featGen.minCityDistricts, featGen.maxCityDistricts);
-        if (districts > 1){
-            std::vector coordinatesInRadius = getCoordinatesInRadius(coordinates, 1);
-            for (auto& here : coordinatesInRadius){
-                if (!tileExists(here)) generateBiome(here); //potentially dangerous line!!! could cause infinite world gen
-                if (getTile(here).getBiome() == tileGen.ocean){
-                    //TODO: search for nearby oceans
+    int numDistricts = randInt(featGen.minCityDistricts, featGen.maxCityDistricts);
+    if (numDistricts > 1){
+        int cityRadius = (int)floor(ceil(sqrt(numDistricts))/2);
+
+        bool generateHarbour = false;
+        if (numDistricts > 2){
+            generateHarbour = true;
+            numDistricts--;
+        }
+        std::queue<int> districtsToGenerate;
+        for (int i = 0; i < numDistricts; i++){
+            if (i == 0) districtsToGenerate.push(featGen.cityMarket);
+            else if (i == 3) districtsToGenerate.push(featGen.cityGate);
+            else districtsToGenerate.push(pickByProbability(featGen.cityDistrictChances));
+        }
+        
+        std::vector coordinatesInRadius = getCoordinatesInRadius(coordinates, cityRadius);
+        std::shuffle(coordinatesInRadius.begin(), coordinatesInRadius.end(), std::default_random_engine(seed));
+
+        for (auto& here : coordinatesInRadius){
+            if (!tileExists(here)) generateBiome(here);
+            if (getTile(here).isTravellable() && getTile(here).getFeature() == featGen.none){
+                if (generateHarbour){
+                    std::vector adjacentCoordinates = getAdjacentCoordinates(here);
+                    for (auto& adjacent : adjacentCoordinates){
+                        if (getTile(adjacent).getBiome() == tileGen.ocean){
+                            getTile(here).setFeature(featGen.cityHarbour);
+                            generateHarbour = false;
+                            break;
+                        }
+                    }
+                }
+                if (getTile(here).getFeature() == featGen.none){
+                    if (!districtsToGenerate.empty()){
+                        getTile(here).setFeature(districtsToGenerate.front());
+                        districtsToGenerate.pop();
+                    }
                 }
             }
         }

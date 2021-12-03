@@ -2,6 +2,7 @@
 #define BOARD
 
 #include <map>
+#include <unordered_set>
 #include <vector>
 #include "tile.h"
 
@@ -16,6 +17,7 @@ struct Path{
 class Board{
     static const int viewSize = 15;
     std::map<std::pair<int,int>, Tile> board;
+    int seed;
 
     /** Generates the board on first load
     *
