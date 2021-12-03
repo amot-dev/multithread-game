@@ -1,6 +1,6 @@
 #include "board.h"
-#include "interface.h"
 #include "global.h"
+#include "interface.h"
 
 int main(){
     std::pair position = std::make_pair(0,0);

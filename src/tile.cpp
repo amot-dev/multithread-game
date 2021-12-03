@@ -1,4 +1,5 @@
 #include "tile.h"
+
 #include "global.h"
 
 Tile::Tile(int biome):biome(biome){}

@@ -1,9 +1,9 @@
 #ifndef SAFE_QUEUE
 #define SAFE_QUEUE
 
-#include <queue>
-#include <mutex>
 #include <condition_variable>
+#include <mutex>
+#include <queue>
 #include <string>
 
 //FIGURE OUT HOW TO PROPERLY CONVERT TO TEMPLATE

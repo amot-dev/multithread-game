@@ -1,4 +1,5 @@
 #include "utility.h"
+
 #include <ctime>
 
 int randInt(int min, int max){

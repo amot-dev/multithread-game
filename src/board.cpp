@@ -1,10 +1,11 @@
 #include "board.h"
+
 #include <queue>
-#include <unordered_set>
 #include <unordered_map>
-#include "utility.h"
+#include <unordered_set>
 #include "exceptions.h"
 #include "global.h"
+#include "utility.h"
 
 Board::Board(){
     srand(time(0));
