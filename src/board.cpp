@@ -48,9 +48,8 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
     visited.insert(start);
     map.emplace(start, Path());
 
-    int distanceTravelled = 0;
     int matches = 0;
-    while(!queue.empty() && distanceTravelled <= maxDistance){
+    while(!queue.empty()){
         std::pair<int,int> previous;
         if (ignoreTravelCost){
             previous = queue.front();
@@ -70,9 +69,11 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
                 path.travelCost = map.at(previous).travelCost + getTile(here).getTravelCost();
                 path.steps.push_back(here);
 
-                if (tileExists(here) && getTile(here).isTravellable()) {
+                if (path.tilesTraversed > maxDistance) break;
+
+                if (tileExists(here)) {
                     if (ignoreTravelCost) queue.push(here);
-                    else priorityQueue.push(std::make_pair(here, path));
+                    else if (getTile(here).isTravellable()) priorityQueue.push(std::make_pair(here, path));
                 }
                 
                 map.emplace(here, path);
@@ -92,7 +93,6 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
             }
         }
         map.erase(previous);
-        distanceTravelled++;
     }
     Path path;
     path.tilesTraversed = -1;
@@ -111,6 +111,7 @@ void Board::generateBoard(){
 
 void Board::generateTile(std::pair<int,int> coordinates){
     generateBiome(coordinates);
+    generateFeature(coordinates);
 }
 
 void Board::generateBiome(std::pair<int,int> coordinates){
