@@ -6,10 +6,23 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  BUILD_TYPE: Debug
+
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v2
-    - name: make test
-      run: make test -C src
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DPACKAGE_TESTS=ON
+
+    - name: Make
+      working-directory: ${{github.workspace}}/build/tests
+      run: make
+    
+    -name: Test
+      working-directory: ${{github.workspace}}/build/bin
+      run: ./test
