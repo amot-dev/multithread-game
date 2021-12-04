@@ -17,7 +17,8 @@ TEST(PathTo, PathToCoordinatesNoCost){
     auto calculatedPath = board.pathTo(start, biome, feature, ignoreTravelCost, maxDistance, toSkip, end);
 
     EXPECT_EQ(calculatedPath.tilesTraversed, expectedTilesTraversed);
-    EXPECT_EQ(calculatedPath.steps.back(), expectedDestination);
+    EXPECT_EQ(calculatedPath.steps.back().first, expectedDestination.first);
+    EXPECT_EQ(calculatedPath.steps.back().second, expectedDestination.second);
 }
 
 TEST(PathTo, PathToCoordinatesNoCostBrokenDistance){
