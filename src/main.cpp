@@ -5,7 +5,7 @@
 int main(){
     std::pair position = std::make_pair(0,0);
     Interface interface;
-    Board board(48);
+    Board board(25);
     statusRows.enqueue("Character Name");
     statusRows.enqueue("==============");
     statusRows.enqueue("");

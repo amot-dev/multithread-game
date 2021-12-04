@@ -7,8 +7,8 @@ set(CMAKE_CXX_FLAGS "-std=c++17")
 
 add_subdirectory(src)
 
-option(PACKAGE_TESTS "Enable testing" OFF)
-if(PACKAGE_TESTS)
+option(TESTING "Enable testing" OFF)
+if(TESTING)
     enable_testing()
     include(GoogleTest)
     add_subdirectory(tests)
