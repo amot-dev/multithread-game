@@ -30,7 +30,7 @@ Tile Board::getTile(std::pair<int,int> coordinates) const {
     return board.at(coordinates);
 }
 
-Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignoreTravelCost, int maxDistance, int toSkip, std::pair<int,int> end = std::make_pair(0,0)) const {
+Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignoreTravelCost, int maxDistance, int toSkip, std::pair<int,int> end) const {
     bool checkBiome = false;
     bool checkFeature = false;
     if (biome != -1) checkBiome = true;
@@ -64,6 +64,8 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
             if (!visited.count(here)){
                 visited.insert(here);
 
+                if (!tileExists(here)) break;
+
                 Path path;
                 path.tilesTraversed = map.at(previous).tilesTraversed + 1;
                 path.travelCost = map.at(previous).travelCost + getTile(here).getTravelCost();
@@ -71,10 +73,8 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
 
                 if (path.tilesTraversed > maxDistance) break;
 
-                if (tileExists(here)) {
-                    if (ignoreTravelCost) queue.push(here);
-                    else if (getTile(here).isTravellable()) priorityQueue.push(std::make_pair(here, path));
-                }
+                if (ignoreTravelCost) queue.push(here);
+                else if (getTile(here).isTravellable()) priorityQueue.push(std::make_pair(here, path));
                 
                 map.emplace(here, path);
             }

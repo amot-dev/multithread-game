@@ -15,7 +15,7 @@ struct Path{
 
 /** Generates and manages the game board  */ 
 class Board{
-    static const int viewSize = 15;
+    static const int viewSize = 21;
     std::map<std::pair<int,int>, Tile> board;
     int seed;
 
@@ -148,7 +148,7 @@ public:
         bool ignoreTravelCost,
         int maxDistance,
         int toSkip,
-        std::pair<int,int> end
+        std::pair<int,int> end = std::make_pair(0,0)
     ) const;
 };
 
