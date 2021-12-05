@@ -2,7 +2,7 @@
 #include "../src/board.h"
 
 TEST(PathTo, PathToCoordinatesNoCost){
-    Board board(32);
+    Board board(7);
     auto start = std::make_pair(0,0);
     auto end = std::make_pair(3,5);
     int biome = -1;
@@ -22,7 +22,7 @@ TEST(PathTo, PathToCoordinatesNoCost){
 }
 
 TEST(PathTo, PathToCoordinatesNoCostBrokenDistance){
-    Board board(32);
+    Board board(7);
     auto start = std::make_pair(0,0);
     auto end = std::make_pair(3,5);
     int biome = -1;
@@ -39,7 +39,7 @@ TEST(PathTo, PathToCoordinatesNoCostBrokenDistance){
 }
 
 TEST(PathTo, PathToCoordinatesNoCostUselessSkip){
-    Board board(25);
+    Board board(7);
     auto start = std::make_pair(0,0);
     auto end = std::make_pair(3,5);
     int biome = -1;
@@ -59,7 +59,7 @@ TEST(PathTo, PathToCoordinatesNoCostUselessSkip){
 }
 
 TEST(PathTo, PathToBiomeNoCostClose){
-    Board board(32);
+    Board board(7);
     TileGen tileGen;
     auto start = std::make_pair(0,0);
     int biome = tileGen.plains;
@@ -69,7 +69,7 @@ TEST(PathTo, PathToBiomeNoCostClose){
     int toSkip = 0;
 
     int expectedTilesTraversed = 1;
-    auto expectedDestination = std::make_pair(0,1);
+    auto expectedDestination = std::make_pair(0,-1);
 
     auto calculatedPath = board.pathTo(start, biome, feature, ignoreTravelCost, maxDistance, toSkip);
 
@@ -79,17 +79,17 @@ TEST(PathTo, PathToBiomeNoCostClose){
 }
 
 TEST(PathTo, PathToBiomeNoCostFar){
-    Board board(32);
+    Board board(7);
     TileGen tileGen;
     auto start = std::make_pair(0,0);
-    int biome = tileGen.desert;
+    int biome = tileGen.ocean;
     int feature = -1;
     bool ignoreTravelCost = true;
     int maxDistance = 25;
     int toSkip = 0;
 
-    int expectedTilesTraversed = 12;
-    auto expectedDestination = std::make_pair(-5,7);
+    int expectedTilesTraversed = 10;
+    auto expectedDestination = std::make_pair(-9,1);
 
     auto calculatedPath = board.pathTo(start, biome, feature, ignoreTravelCost, maxDistance, toSkip);
 
