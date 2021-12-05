@@ -15,7 +15,7 @@ struct Path{
 
 /** Generates and manages the game board  */ 
 class Board{
-    static const int viewSize = 21;
+    static const int viewSize = 25;
     std::map<std::pair<int,int>, Tile> board;
     int seed;
 
@@ -77,6 +77,14 @@ class Board{
     * @return A vector containing the requested coordinates
     */
     std::vector<std::pair<int,int>> getCoordinatesInRadius(std::pair<int,int> coordinates, int radius) const;
+
+    /** Generates a vector of coordinates in a ring at a radius around some coordinates
+    *
+    * @param coordinates x,y pair of coordinates
+    * @param radius Radius of ring to look at
+    * @return A vector containing the requested coordinates
+    */
+    std::vector<std::pair<int,int>> getCoordinatesInRing(std::pair<int,int> coordinates, int radius) const;
 
     /** Generates a vector of coordinates adjacent some coordinates
     *

@@ -101,12 +101,20 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
 }
 
 void Board::generateBoard(){
+    for (int radius = 0; radius <= viewSize/2; radius++){
+        auto coordinatesInRing = getCoordinatesInRing(std::make_pair(0,0), radius);
+        for (auto& here : coordinatesInRing){
+            generateTile(here);
+        }
+    }
+    /*
     for (int i = -viewSize/2; i <= viewSize/2; i++){
         for (int j = -viewSize/2; j <= viewSize/2; j++){
             std::pair coordinates = std::make_pair(i,j);
             generateTile(coordinates);
         }
     }
+    */
 }
 
 void Board::generateTile(std::pair<int,int> coordinates){
@@ -176,7 +184,7 @@ void Board::generateFeature(std::pair<int,int> coordinates){
                 if (generateHarbour){
                     std::vector adjacentCoordinates = getAdjacentCoordinates(here);
                     for (auto& adjacent : adjacentCoordinates){
-                        if (getTile(adjacent).getBiome() == tileGen.ocean){
+                        if (tileExists(adjacent) && getTile(adjacent).getBiome() == tileGen.ocean){
                             getTile(here).setFeature(featGen.cityHarbour);
                             generateHarbour = false;
                             break;
@@ -213,6 +221,23 @@ std::vector<std::pair<int,int>> Board::getCoordinatesInRadius(std::pair<int,int>
         }
     }
     return coordinatesInRadius;
+}
+
+std::vector<std::pair<int,int>> Board::getCoordinatesInRing(std::pair<int,int> coordinates, int radius) const {
+    std::vector<std::pair<int,int>> coordinatesInRing;
+    coordinatesInRing.reserve(8*radius);
+    for (int i = coordinates.first - radius; i <= coordinates.first + radius; i++){
+        if (i == coordinates.first - radius || i == coordinates.first + radius){
+            for (int j = coordinates.second - radius; j <= coordinates.second + radius; j++){
+                coordinatesInRing.push_back(std::make_pair(i,j));
+            }
+        }
+        else {
+            coordinatesInRing.push_back(std::make_pair(i, coordinates.second - radius));
+            coordinatesInRing.push_back(std::make_pair(i, coordinates.second + radius));
+        }
+    }
+    return coordinatesInRing;
 }
 
 std::vector<std::pair<int,int>> Board::getAdjacentCoordinates(std::pair<int,int> coordinates) const {
