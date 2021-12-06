@@ -67,11 +67,13 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
             priorityQueue.pop();
         }
 
+        if (!tileExists(previous)) continue;
+
         for (auto& here : getAdjacentCoordinates(previous)){
             if (!visited.count(here)){
                 visited.insert(here);
 
-                if (!tileExists(here)) break;
+                if (!tileExists(here)) continue;
 
                 Path path;
                 path.tilesTraversed = map.at(previous).tilesTraversed + 1;
@@ -84,19 +86,19 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
                 else if (getTile(here).isTravellable()) priorityQueue.push(std::make_pair(here, path));
                 
                 map.emplace(here, path);
-            }
-            
-            if (!checkBiome && !checkFeature){
-                if (here == end) return map.at(here);
-            }
-            else{
-                bool match = false;
-                if (checkBiome && getTile(here).getBiome() == biome) match = true;
-                if (checkFeature) match = false;
-                if (checkFeature && getTile(here).getFeature() == feature) match = true;
 
-                if (match) matches++;
-                if (matches > toSkip) return map.at(here);
+                if (!checkBiome && !checkFeature){
+                    if (here == end) return map.at(here);
+                }
+                else{
+                    bool match = false;
+                    if (checkBiome && getTile(here).getBiome() == biome) match = true;
+                    if (checkFeature) match = false;
+                    if (checkFeature && getTile(here).getFeature() == feature) match = true;
+
+                    if (match) matches++;
+                    if (matches > toSkip) return map.at(here);
+                }
             }
         }
         map.erase(previous);
