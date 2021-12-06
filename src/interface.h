@@ -6,17 +6,34 @@
 
 class Interface{
     TileGen tileGen;
+    FeatureGen featGen;
     /** Defines the amount of spacing to insert before the status */
     int statusSpacingAmount = 20;
     /** String containing spacing to insert before the status */
     std::string statusSpacing = "";
+    /** Defines the display character for the player location */
+    std::string playerChar = "\u263A";
     /** Defines the display characters for each biome */
-    const std::map<int,char> biomeChars = {
-        {tileGen.plains,'.'},
-        {tileGen.forest,'&'},
-        {tileGen.ocean,'~'},
-        {tileGen.desert,'#'},
-        {tileGen.mountains,'^'}
+    const std::map<int,std::string> biomeChars = {
+        {tileGen.plains,"\u169A"},
+        {tileGen.forest, "\u2E19"},
+        {tileGen.ocean,"\u23D6"},
+        {tileGen.desert,"."},
+        {tileGen.mountains,"\u1A0F"}
+    };
+    const std::map<int,std::string> featureChars = {
+        {featGen.city,"\u25A3"},
+        {featGen.cityMarket,"\u2696"},
+        {featGen.cityHarbour,"\u2693"},
+        {featGen.cityPlaza,"\u2698"},
+        {featGen.cityArena,"\u2694"},
+        {featGen.cityPrison,"\u2162"},
+        {featGen.cityNeighbourhood,"\u2302"},
+        {featGen.village,"\u2C26"},
+        {featGen.camp,"\u15D7"},
+        {featGen.loneHouse,"\u2302"},
+        {featGen.cave,"\u26CF"},
+        {featGen.lake,"o"},
     };
 public:
     /** Initializes the interface

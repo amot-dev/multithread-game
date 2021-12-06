@@ -31,7 +31,7 @@ struct TileGen{
 /** Defines some useful values used in feature generation */
 struct FeatureGen{
     /** Names of all features currently used */
-    enum features {none, city, cityMarket, cityHarbour, cityGate, cityPlaza, cityArena, cityPrison, cityNeighbourhood,
+    enum features {none, city, cityMarket, cityHarbour, cityPlaza, cityArena, cityPrison, cityNeighbourhood,
         village, camp, loneHouse, cave, lake};
     /** Defines chance for any feature to generate */
     const double featureChance = 0.05;
@@ -64,7 +64,7 @@ struct FeatureGen{
         {cityNeighbourhood, 0.2}
     };
     /** Defines minimum number of districts a city will generate */
-    const int minCityDistricts = 1;
+    const int minCityDistricts = 2;
     const int maxCityDistricts = 9;
 };
 

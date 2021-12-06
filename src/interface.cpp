@@ -17,11 +17,16 @@ void Interface::printGame(const Board& board, std::pair<int,int> position) const
     for (int i = 0; i < 100; i++) std::cout << std::endl;
     for (int i = (position.first - viewSize/2); i <= (position.first + viewSize/2); i++){
         for (int j = (position.second - viewSize/2); j <= (position.second + viewSize/2); j++){
-            std::pair coordinates = std::make_pair(i,j);
-            Tile tile = board.getTile(coordinates);
+            std::pair here = std::make_pair(i,j);
+            Tile tile = board.getTile(here);
 
-            if (coordinates == position) std::cout << "@  ";
-            else std::cout << biomeChars.at(tile.getBiome()) << "  ";
+            if (here == position) std::cout << playerChar << "  ";
+            else if (tile.getFeature() != featGen.none){
+                std::cout << featureChars.at(tile.getFeature()) << "  ";
+            }
+            else {
+                std::cout << biomeChars.at(tile.getBiome()) << "  ";
+            }
         }
         std::cout << statusSpacing << statusRows.tryDequeue() << std::endl;
     }
