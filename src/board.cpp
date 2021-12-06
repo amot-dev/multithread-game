@@ -150,13 +150,10 @@ void Board::generateBiome(std::pair<int,int> coordinates){
 
 void Board::generateFeature(std::pair<int,int> coordinates){
     if (!getTile(coordinates).isTravellable()) return; //TEMPORARY (no features on ocean or mountains yet)
-
     int feature = 0;
     if (pickValue(featGen.featureChance)) feature = pickByProbability(featGen.featureChances);
-    if (feature != featGen.city) {
-        getTile(coordinates).setFeature(feature);
-        return;
-    }
+    board.at(coordinates).setFeature(feature);
+    if (feature != featGen.city) return;
 
     int numDistricts = randInt(featGen.minCityDistricts, featGen.maxCityDistricts);
     if (numDistricts > 1){
@@ -183,7 +180,7 @@ void Board::generateFeature(std::pair<int,int> coordinates){
                     std::vector adjacentCoordinates = getAdjacentCoordinates(here);
                     for (auto& adjacent : adjacentCoordinates){
                         if (tileExists(adjacent) && getTile(adjacent).getBiome() == tileGen.ocean){
-                            getTile(here).setFeature(featGen.cityHarbour);
+                            board.at(here).setFeature(featGen.cityHarbour);
                             generateHarbour = false;
                             break;
                         }
@@ -191,7 +188,7 @@ void Board::generateFeature(std::pair<int,int> coordinates){
                 }
                 if (getTile(here).getFeature() == featGen.none){
                     if (!districtsToGenerate.empty()){
-                        getTile(here).setFeature(districtsToGenerate.front());
+                        board.at(here).setFeature(districtsToGenerate.front());
                         districtsToGenerate.pop();
                     }
                 }
