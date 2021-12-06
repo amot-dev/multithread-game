@@ -10,13 +10,20 @@
 #include "utility.h"
 
 Board::Board(){
-    srand(time(0));
+    seed = time(0);
+    srand(seed);
     generateBoard();
 }
 
 Board::Board(int seed) : seed(seed){
     srand(seed);
     generateBoard();
+}
+
+Board::Board(int seed, std::map<std::pair<int,int>,Tile> loadBoard, std::pair<int,int> position) : seed(seed){
+    board = loadBoard;
+    auto viewableBoard = getCoordinatesInRadius(position, viewSize/2);
+    for (auto& here : viewableBoard) if (!tileExists(here)) throw InvalidBoardLoad();
 }
 
 Board::~Board(){}
@@ -107,14 +114,6 @@ void Board::generateBoard(){
             generateTile(here);
         }
     }
-    /*
-    for (int i = -viewSize/2; i <= viewSize/2; i++){
-        for (int j = -viewSize/2; j <= viewSize/2; j++){
-            std::pair coordinates = std::make_pair(i,j);
-            generateTile(coordinates);
-        }
-    }
-    */
 }
 
 void Board::generateTile(std::pair<int,int> coordinates){
@@ -171,7 +170,6 @@ void Board::generateFeature(std::pair<int,int> coordinates){
         std::queue<int> districtsToGenerate;
         for (int i = 0; i < numDistricts; i++){
             if (i == 0) districtsToGenerate.push(featGen.cityMarket);
-            else if (i == 3) districtsToGenerate.push(featGen.cityGate);
             else districtsToGenerate.push(pickByProbability(featGen.cityDistrictChances));
         }
         

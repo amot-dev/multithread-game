@@ -15,7 +15,7 @@ struct Path{
 
 /** Generates and manages the game board  */ 
 class Board{
-    static const int viewSize = 25;
+    static const int viewSize = 21;
     std::map<std::pair<int,int>, Tile> board;
     int seed;
 
@@ -119,6 +119,14 @@ public:
     * @param seed Seed to use in generation
     */
     Board(int seed);
+
+    /** Load board
+    *
+    * @param seed Seed to use in further generation
+    * @param loadBoard Board to load (must be at least viewSize)
+    * @param position Player position (used to check validity of board)
+    */
+    Board(int seed, std::map<std::pair<int,int>,Tile> loadBoard, std::pair<int,int> position);
 
     ~Board();
 
