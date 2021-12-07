@@ -6,7 +6,6 @@
 #include <queue>
 #include <string>
 
-//FIGURE OUT HOW TO PROPERLY CONVERT TO TEMPLATE
 class SafeQueue{
     std::queue<std::string> queue;
     std::mutex mutex;

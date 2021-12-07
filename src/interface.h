@@ -4,9 +4,14 @@
 #include "board.h"
 #include "tile.h"
 
+/**
+ * @brief Interfaces between the Board, Player, and human
+ * 
+ */
 class Interface{
     TileGen tileGen;
     FeatureGen featGen;
+
     /** Defines the amount of spacing to insert before the status */
     int statusSpacingAmount = 20;
     /** String containing spacing to insert before the status */
@@ -21,6 +26,7 @@ class Interface{
         {tileGen.desert,"."},
         {tileGen.mountains,"\u1A0F"}
     };
+    /** Defines the display characters for each feature */
     const std::map<int,std::string> featureChars = {
         {featGen.city,"\u25A3"},
         {featGen.cityMarket,"\u2696"},
@@ -36,22 +42,25 @@ class Interface{
         {featGen.lake,"o"},
     };
 public:
-    /** Initializes the interface
-    *
-    */
+    /**
+     * @brief Construct a new Interface object (default constructor)
+     * 
+     */
     Interface();
 
-    /** Changes the spacing between the board and status
-    *
-    * @param spacingAmount The value to change the spacing to
-    */
+    /**
+     * @brief Changes the spacing between the board and status
+     * 
+     * @param spacingAmount The value to change the spacing to
+     */
     void setStatusSpacingAmount(int spacingAmount);
 
-    /** Prints a human-readable board
-    *
-    * @param board Board to print
-    * @param position Player position
-    */
+    /**
+     * @brief Prints a human-readable board
+     * 
+     * @param board Board to print
+     * @param position Player position
+     */
     void printGame(const Board& board, std::pair<int,int> position) const;
 };
 
