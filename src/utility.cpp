@@ -2,6 +2,7 @@
 
 #include <ctime>
 #include <fstream>
+#include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/utility.hpp>
@@ -70,23 +71,36 @@ std::vector<std::pair<int,int>> getAdjacentCoordinates(std::pair<int,int> coordi
     return adjacentCoordinates;
 }
 
-void save(Board board, std::string savename){
-    savename.append(".json");
+void save(Board board, std::string savename, bool json){
+    savename.append(".save");
+    if (json) savename.append(".json");
+    
     std::ofstream ofile(savename);
-    {
+    if (json){
         cereal::JSONOutputArchive oarchive(ofile);
+        oarchive(board);
+    }
+    else {
+        cereal::BinaryOutputArchive oarchive(ofile);
         oarchive(board);
     }
 }
 
-Board load(std::string savename, std::pair<int,int> position){
+Board load(std::string savename, std::pair<int,int> position, bool json){
     Board board;
-    savename.append(".json");
+    savename.append(".save");
+    if (json) savename.append(".json");
+
     std::ifstream ifile(savename);
-    {
+    if (json){
         cereal::JSONInputArchive iarchive(ifile);
         iarchive(board);
     }
+    else {
+        cereal::BinaryInputArchive iarchive(ifile);
+        iarchive(board);
+    }
+
     if (!board.verify(position)) throw InvalidBoardLoad();
     return board;
 }

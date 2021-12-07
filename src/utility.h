@@ -71,16 +71,19 @@ std::vector<std::pair<int,int>> getAdjacentCoordinates(std::pair<int,int> coordi
 /**
  * @brief Saves the board to a file
  * 
+ * @param board Board to save
  * @param savename Name to save under
+ * @Whether or not to use json
  */
-void save(Board board, std::string savename);
+void save(Board board, std::string savename, bool json = false);
 
 /**
  * @brief Loads board from a file
  * 
  * @param savename Name of save to load
  * @param position Position of the player
+ * @param json Whether or not to use json
  */
-Board load(std::string savename, std::pair<int,int> position);
+Board load(std::string savename, std::pair<int,int> position, bool json = false);
 
 #endif
