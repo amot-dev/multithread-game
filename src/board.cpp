@@ -92,9 +92,12 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
                 }
                 else{
                     bool match = false;
-                    if (checkBiome && getTile(here).getBiome() == biome) match = true;
+                    int biomeHere = getTile(here).getBiome();
+                    int featureHere = getTile(here).getFeature();
+
+                    if (checkBiome && biomeHere == biome) match = true;
                     if (checkFeature) match = false;
-                    if (checkFeature && getTile(here).getFeature() == feature) match = true;
+                    if (checkFeature && (featureHere == feature || (feature == featGen.any && featureHere != featGen.none))) match = true;
 
                     if (match) matches++;
                     if (matches > toSkip) return map.at(here);

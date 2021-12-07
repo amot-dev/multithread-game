@@ -39,7 +39,7 @@ struct TileGen{
  */
 struct FeatureGen{
     /** Names of all features currently used */
-    enum features {none, city, cityMarket, cityHarbour, cityPlaza, cityArena, cityPrison, cityNeighbourhood,
+    enum features {none, any, city, cityMarket, cityHarbour, cityPlaza, cityArena, cityPrison, cityNeighbourhood,
         village, camp, loneHouse, cave, lake};
     /** Defines chance for any feature to generate */
     const double featureChance = 0.05;
