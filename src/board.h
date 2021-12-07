@@ -131,6 +131,12 @@ public:
 
     ~Board();
 
+    /**
+     * @brief Allows serialization of board class
+     * 
+     * @tparam Archive 
+     * @param archive 
+     */
     template<class Archive>
     void serialize(Archive& archive){
         archive(seed, board);

@@ -2,6 +2,7 @@
 #define UTILITY
 
 #include <map>
+#include "board.h"
 
 struct PairHash{
     template <class T1, class T2>
@@ -30,5 +31,19 @@ bool pickValue(double probability);
 * @return Key returned
 */
 int pickByProbability(std::map<int, double> map);
+
+/**
+ * @brief Saves the board to a file
+ * 
+ * @param savename Name to save under
+ */
+void save(Board board, std::string savename);
+
+/**
+ * @brief Loads board from a file
+ * 
+ * @param savename Name of save to load
+ */
+Board load(std::string savename);
 
 #endif

@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+Tile::Tile(){}
+
 Tile::Tile(int biome) : biome(biome){
     feature = featGen.none;
     travelCost = tileGen.biomeTravelCosts.at(biome);

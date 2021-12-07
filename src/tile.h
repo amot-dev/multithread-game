@@ -2,6 +2,7 @@
 #define TILE
 
 #include <map>
+#include <cereal/archives/json.hpp>
 
 /** Defines some useful values used in tile generation */
 struct TileGen{
@@ -75,11 +76,25 @@ class Tile{
     int feature;
     int travelCost;
 public:
+
+    Tile();
+
     /** Create a new tile and set it to a biome
     *
     * @param biome The biome to initialize the tile with
     */
     Tile(int biome);
+
+    /**
+     * @brief Allows serialization of Tile class
+     * 
+     * @tparam Archive 
+     * @param archive 
+     */
+    template<class Archive>
+    void serialize(Archive& archive){
+        archive(ready, biome, feature, travelCost);
+    }
 
     /** Return the biome of the tile
     *
