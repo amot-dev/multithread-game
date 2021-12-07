@@ -1,4 +1,4 @@
-#include "../submodules/googletest/googletest/include/gtest/gtest.h"
+#include <gtest/gtest.h>
 #include "../src/board.h"
 
 TEST(PathTo, PathToCoordinatesNoCost){

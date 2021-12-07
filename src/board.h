@@ -4,6 +4,7 @@
 #include <map>
 #include <unordered_set>
 #include <vector>
+#include "../submodules/cereal/include/cereal/archives/json.hpp"
 #include "tile.h"
 
 /** Construct used to contain all data related to a path between two tiles */
@@ -129,6 +130,11 @@ public:
     Board(int seed, std::map<std::pair<int,int>,Tile> loadBoard, std::pair<int,int> position);
 
     ~Board();
+
+    template<class Archive>
+    void serialize(Archive& archive){
+        archive(seed, board);
+    }
 
     /** Returns the board's view size
     *
