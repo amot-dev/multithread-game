@@ -5,6 +5,7 @@
 Tile::Tile(){}
 
 Tile::Tile(int biome) : biome(biome){
+    ready = false;
     feature = featGen.none;
     travelCost = tileGen.biomeTravelCosts.at(biome);
 }

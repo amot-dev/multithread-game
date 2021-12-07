@@ -2,6 +2,7 @@
 #define UTILITY
 
 #include <map>
+#include <vector>
 #include "board.h"
 
 /**
@@ -41,6 +42,33 @@ bool pickValue(double probability);
 int pickByProbability(std::map<int, double> map);
 
 /**
+ * @brief Generates a vector of coordinates in a radius around some coordinates
+ * 
+ * @param coordinates x,y pair of coordinates
+ * @param radius Radius to look around
+ * @return A vector containing the requested coordinates 
+ */
+std::vector<std::pair<int,int>> getCoordinatesInRadius(std::pair<int,int> coordinates, int radius);
+/**
+ * @brief Generates a vector of coordinates in a ring at a radius around some coordinates
+ * 
+ * @param coordinates x,y pair of coordinates
+ * @param radius Radius of ring to look at
+ * @return A vector containing the requested coordinates
+ */
+std::vector<std::pair<int,int>> getCoordinatesInRing(std::pair<int,int> coordinates, int radius);
+/**
+ * @brief Generates a vector of coordinates adjacent some coordinates
+ * 
+ * Here, diagonal connections are not considered adjacent since 
+ * diagonal moves are not allowed
+ * 
+ * @param coordinates A vector containing the requested coordinates
+ * @return A vector containing the requested coordinates
+ */
+std::vector<std::pair<int,int>> getAdjacentCoordinates(std::pair<int,int> coordinates);
+
+/**
  * @brief Saves the board to a file
  * 
  * @param savename Name to save under
@@ -51,7 +79,8 @@ void save(Board board, std::string savename);
  * @brief Loads board from a file
  * 
  * @param savename Name of save to load
+ * @param position Position of the player
  */
-Board load(std::string savename);
+Board load(std::string savename, std::pair<int,int> position);
 
 #endif

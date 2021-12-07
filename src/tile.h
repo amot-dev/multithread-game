@@ -115,7 +115,12 @@ public:
      */
     template<class Archive>
     void serialize(Archive& archive){
-        archive(ready, biome, feature, travelCost);
+        archive(
+            cereal::make_nvp("Ready",ready),
+            cereal::make_nvp("Biome",biome),
+            cereal::make_nvp("Feature",feature),
+            cereal::make_nvp("Travel Cost",travelCost)
+        );
     }
 
     /**

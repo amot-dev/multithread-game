@@ -90,35 +90,6 @@ class Board{
     bool tileReady(std::pair<int,int> coordinates) const;
 
     /**
-     * @brief Generates a vector of coordinates in a radius around some coordinates
-     * 
-     * @param coordinates x,y pair of coordinates
-     * @param radius Radius to look around
-     * @return A vector containing the requested coordinates 
-     */
-    std::vector<std::pair<int,int>> getCoordinatesInRadius(std::pair<int,int> coordinates, int radius) const;
-
-    /**
-     * @brief Generates a vector of coordinates in a ring at a radius around some coordinates
-     * 
-     * @param coordinates x,y pair of coordinates
-     * @param radius Radius of ring to look at
-     * @return A vector containing the requested coordinates
-     */
-    std::vector<std::pair<int,int>> getCoordinatesInRing(std::pair<int,int> coordinates, int radius) const;
-
-    /**
-     * @brief Generates a vector of coordinates adjacent some coordinates
-     * 
-     * Here, diagonal connections are not considered adjacent since 
-     * diagonal moves are not allowed
-     * 
-     * @param coordinates A vector containing the requested coordinates
-     * @return A vector containing the requested coordinates
-     */
-    std::vector<std::pair<int,int>> getAdjacentCoordinates(std::pair<int,int> coordinates) const;
-
-    /**
      * @brief Implements travel cost comparison for tiles by coordinate
      * 
      */
@@ -162,7 +133,10 @@ public:
      */
     template<class Archive>
     void serialize(Archive& archive){
-        archive(seed, board);
+        archive(
+            cereal::make_nvp("Seed",seed),
+            cereal::make_nvp("Board",board)
+        );
     }
 
     /**
@@ -173,12 +147,27 @@ public:
     int getViewSize() const;
 
     /**
+     * @brief Get the board's seed
+     * 
+     * @return Board's seed
+     */
+    int getSeed() const;
+
+    /**
      * @brief Get the tile at the coordinates
      * 
      * @param coordinates Location of desired tile
      * @return Tile at coordinates
      */
     Tile getTile(std::pair<int,int> coordinates) const;
+
+    /**
+     * @brief Verify board integrity
+     * 
+     * @param position Position to verify around
+     * @return Whether or not the board is valid for play
+     */
+    bool verify(std::pair<int,int> position) const;
 
     /**
      * @brief Generates a path between a starting coordinates and some tile, up to a maximum distance

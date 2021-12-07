@@ -5,6 +5,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/utility.hpp>
+#include "exceptions.h"
 
 int randInt(int min, int max){
     return rand() % max + min;
@@ -31,6 +32,44 @@ int pickByProbability(std::map<int, double> map){
     return -1;
 }
 
+std::vector<std::pair<int,int>> getCoordinatesInRadius(std::pair<int,int> coordinates, int radius) {
+    std::vector<std::pair<int,int>> coordinatesInRadius;
+    coordinatesInRadius.reserve(radius*radius);
+    for (int i = coordinates.first - radius; i <= coordinates.first + radius; i++){
+        for (int j = coordinates.second - radius; j <= coordinates.second + radius; j++){
+            coordinatesInRadius.push_back(std::make_pair(i,j));
+        }
+    }
+    return coordinatesInRadius;
+}
+
+std::vector<std::pair<int,int>> getCoordinatesInRing(std::pair<int,int> coordinates, int radius) {
+    std::vector<std::pair<int,int>> coordinatesInRing;
+    coordinatesInRing.reserve(8*radius);
+    for (int i = coordinates.first - radius; i <= coordinates.first + radius; i++){
+        if (i == coordinates.first - radius || i == coordinates.first + radius){
+            for (int j = coordinates.second - radius; j <= coordinates.second + radius; j++){
+                coordinatesInRing.push_back(std::make_pair(i,j));
+            }
+        }
+        else {
+            coordinatesInRing.push_back(std::make_pair(i, coordinates.second - radius));
+            coordinatesInRing.push_back(std::make_pair(i, coordinates.second + radius));
+        }
+    }
+    return coordinatesInRing;
+}
+
+std::vector<std::pair<int,int>> getAdjacentCoordinates(std::pair<int,int> coordinates) {
+    std::vector<std::pair<int,int>> adjacentCoordinates;
+    adjacentCoordinates.reserve(4);
+    adjacentCoordinates.push_back(std::make_pair(coordinates.first-1,coordinates.second));
+    adjacentCoordinates.push_back(std::make_pair(coordinates.first,coordinates.second-1));
+    adjacentCoordinates.push_back(std::make_pair(coordinates.first,coordinates.second+1));
+    adjacentCoordinates.push_back(std::make_pair(coordinates.first+1,coordinates.second));
+    return adjacentCoordinates;
+}
+
 void save(Board board, std::string savename){
     savename.append(".json");
     std::ofstream ofile(savename);
@@ -40,7 +79,7 @@ void save(Board board, std::string savename){
     }
 }
 
-Board load(std::string savename){
+Board load(std::string savename, std::pair<int,int> position){
     Board board;
     savename.append(".json");
     std::ifstream ifile(savename);
@@ -48,5 +87,6 @@ Board load(std::string savename){
         cereal::JSONInputArchive iarchive(ifile);
         iarchive(board);
     }
+    if (!board.verify(position)) throw InvalidBoardLoad();
     return board;
 }

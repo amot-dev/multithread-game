@@ -20,21 +20,21 @@ Board::Board(int seed) : seed(seed){
     generateBoard();
 }
 
-Board::Board(int seed, std::map<std::pair<int,int>,Tile> loadBoard, std::pair<int,int> position) : seed(seed){
-    board = loadBoard;
-    auto viewableBoard = getCoordinatesInRadius(position, viewSize/2);
-    for (auto& here : viewableBoard) if (!tileExists(here)) throw InvalidBoardLoad();
-}
-
 Board::~Board(){}
 
-int Board::getViewSize() const {
-    return viewSize;
-}
+int Board::getViewSize() const {return viewSize;}
+
+int Board::getSeed() const {return seed;}
 
 Tile Board::getTile(std::pair<int,int> coordinates) const {
     if (!tileExists(coordinates)) throw TileMissingException();
     return board.at(coordinates);
+}
+
+bool Board::verify(std::pair<int,int> position) const {
+    auto viewableBoard = getCoordinatesInRadius(position, viewSize/2);
+    for (auto& here : viewableBoard) if (!tileExists(here)) return false;
+    return true;
 }
 
 Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignoreTravelCost, int maxDistance, int toSkip, std::pair<int,int> end) const {
@@ -207,44 +207,6 @@ bool Board::tileExists(std::pair<int,int> coordinates) const {
 bool Board::tileReady(std::pair<int,int> coordinates) const {
     if (!tileExists(coordinates)) return false;
     return board.at(coordinates).isReady();
-}
-
-std::vector<std::pair<int,int>> Board::getCoordinatesInRadius(std::pair<int,int> coordinates, int radius) const {
-    std::vector<std::pair<int,int>> coordinatesInRadius;
-    coordinatesInRadius.reserve(radius*radius);
-    for (int i = coordinates.first - radius; i <= coordinates.first + radius; i++){
-        for (int j = coordinates.second - radius; j <= coordinates.second + radius; j++){
-            coordinatesInRadius.push_back(std::make_pair(i,j));
-        }
-    }
-    return coordinatesInRadius;
-}
-
-std::vector<std::pair<int,int>> Board::getCoordinatesInRing(std::pair<int,int> coordinates, int radius) const {
-    std::vector<std::pair<int,int>> coordinatesInRing;
-    coordinatesInRing.reserve(8*radius);
-    for (int i = coordinates.first - radius; i <= coordinates.first + radius; i++){
-        if (i == coordinates.first - radius || i == coordinates.first + radius){
-            for (int j = coordinates.second - radius; j <= coordinates.second + radius; j++){
-                coordinatesInRing.push_back(std::make_pair(i,j));
-            }
-        }
-        else {
-            coordinatesInRing.push_back(std::make_pair(i, coordinates.second - radius));
-            coordinatesInRing.push_back(std::make_pair(i, coordinates.second + radius));
-        }
-    }
-    return coordinatesInRing;
-}
-
-std::vector<std::pair<int,int>> Board::getAdjacentCoordinates(std::pair<int,int> coordinates) const {
-    std::vector<std::pair<int,int>> adjacentCoordinates;
-    adjacentCoordinates.reserve(4);
-    adjacentCoordinates.push_back(std::make_pair(coordinates.first-1,coordinates.second));
-    adjacentCoordinates.push_back(std::make_pair(coordinates.first,coordinates.second-1));
-    adjacentCoordinates.push_back(std::make_pair(coordinates.first,coordinates.second+1));
-    adjacentCoordinates.push_back(std::make_pair(coordinates.first+1,coordinates.second));
-    return adjacentCoordinates;
 }
 
 bool Board::CompareTravelCost::operator()(const std::pair<std::pair<int,int>,Path>& lhs, const std::pair<std::pair<int,int>,Path>& rhs) const {
