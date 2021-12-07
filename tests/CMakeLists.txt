@@ -9,6 +9,8 @@ macro(package_add_test TESTNAME)
     set_target_properties(${TESTNAME} PROPERTIES FOLDER tests)
 endmacro()
 
+configure_file(pathTo.save pathTo.save COPYONLY)
+
 package_add_test(board_test board_test.cpp ../src/board.cpp ../src/tile.cpp ../src/utility.cpp)
 target_link_libraries(board_test cereal)
 

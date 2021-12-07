@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include "../src/board.h"
+#include "../src/utility.h"
 
 TEST(PathTo, PathToCoordinatesNoCost){
-    Board board(7);
     auto start = std::make_pair(0,0);
     auto end = std::make_pair(3,5);
     int biome = -1;
@@ -14,6 +14,7 @@ TEST(PathTo, PathToCoordinatesNoCost){
     int expectedTilesTraversed = 8;
     auto expectedDestination = std::make_pair(3,5);
 
+    Board board = load("pathTo", start);
     auto calculatedPath = board.pathTo(start, biome, feature, ignoreTravelCost, maxDistance, toSkip, end);
 
     EXPECT_EQ(calculatedPath.tilesTraversed, expectedTilesTraversed);
@@ -22,7 +23,6 @@ TEST(PathTo, PathToCoordinatesNoCost){
 }
 
 TEST(PathTo, PathToCoordinatesNoCostBrokenDistance){
-    Board board(7);
     auto start = std::make_pair(0,0);
     auto end = std::make_pair(3,5);
     int biome = -1;
@@ -33,13 +33,13 @@ TEST(PathTo, PathToCoordinatesNoCostBrokenDistance){
 
     int expectedTilesTraversed = -1;
 
+    Board board = load("pathTo", start);
     auto calculatedPath = board.pathTo(start, biome, feature, ignoreTravelCost, maxDistance, toSkip, end);
 
     EXPECT_EQ(calculatedPath.tilesTraversed, expectedTilesTraversed);
 }
 
 TEST(PathTo, PathToCoordinatesNoCostUselessSkip){
-    Board board(7);
     auto start = std::make_pair(0,0);
     auto end = std::make_pair(3,5);
     int biome = -1;
@@ -51,6 +51,7 @@ TEST(PathTo, PathToCoordinatesNoCostUselessSkip){
     int expectedTilesTraversed = 8;
     auto expectedDestination = std::make_pair(3,5);
 
+    Board board = load("pathTo", start);
     auto calculatedPath = board.pathTo(start, biome, feature, ignoreTravelCost, maxDistance, toSkip, end);
 
     EXPECT_EQ(calculatedPath.tilesTraversed, expectedTilesTraversed);
@@ -59,7 +60,6 @@ TEST(PathTo, PathToCoordinatesNoCostUselessSkip){
 }
 
 TEST(PathTo, PathToBiomeNoCostClose){
-    Board board(7);
     TileGen tileGen;
     auto start = std::make_pair(0,0);
     int biome = tileGen.plains;
@@ -70,6 +70,7 @@ TEST(PathTo, PathToBiomeNoCostClose){
 
     int expectedTilesTraversed = 1;
 
+    Board board = load("pathTo", start);
     auto calculatedPath = board.pathTo(start, biome, feature, ignoreTravelCost, maxDistance, toSkip);
 
     EXPECT_EQ(calculatedPath.tilesTraversed, expectedTilesTraversed);
@@ -77,7 +78,6 @@ TEST(PathTo, PathToBiomeNoCostClose){
 }
 
 TEST(PathTo, PathToBiomeNoCostFar){
-    Board board(7);
     TileGen tileGen;
     auto start = std::make_pair(0,0);
     int biome = tileGen.mountains;
@@ -88,6 +88,7 @@ TEST(PathTo, PathToBiomeNoCostFar){
 
     int expectedTilesTraversed = 10;
 
+    Board board = load("pathTo", start);
     auto calculatedPath = board.pathTo(start, biome, feature, ignoreTravelCost, maxDistance, toSkip);
 
     EXPECT_EQ(calculatedPath.tilesTraversed, expectedTilesTraversed);
@@ -95,7 +96,6 @@ TEST(PathTo, PathToBiomeNoCostFar){
 }
 
 TEST(PathTo, PathToBiomeNoCostCannotFind){
-    Board board(7);
     TileGen tileGen;
     auto start = std::make_pair(0,0);
     int biome = tileGen.ocean;
@@ -106,6 +106,7 @@ TEST(PathTo, PathToBiomeNoCostCannotFind){
 
     int expectedTilesTraversed = -1;
 
+    Board board = load("pathTo", start);
     auto calculatedPath = board.pathTo(start, biome, feature, ignoreTravelCost, maxDistance, toSkip);
 
     EXPECT_EQ(calculatedPath.tilesTraversed, expectedTilesTraversed);

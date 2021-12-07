@@ -112,9 +112,7 @@ Path Board::pathTo(std::pair<int,int> start, int biome, int feature, bool ignore
 void Board::generateBoard(){
     for (int radius = 0; radius <= viewSize/2; radius++){
         auto coordinatesInRing = getCoordinatesInRing(std::make_pair(0,0), radius);
-        for (auto& here : coordinatesInRing){
-            generateTile(here);
-        }
+        for (auto& here : coordinatesInRing) generateTile(here);
     }
 }
 
