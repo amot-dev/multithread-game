@@ -4,7 +4,7 @@
 #include <map>
 #include <unordered_set>
 #include <vector>
-#include "../submodules/cereal/include/cereal/archives/json.hpp"
+#include <cereal/archives/json.hpp>
 #include "tile.h"
 
 /** Construct used to contain all data related to a path between two tiles */
