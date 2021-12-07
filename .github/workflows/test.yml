@@ -31,3 +31,8 @@ jobs:
     - name: Test Board
       working-directory: ${{github.workspace}}/build/tests
       run: ./board_test
+      
+    - name: Test Utility
+      working-directory: ${{github.workspace}}/build/tests
+      run: ./utility_test
+
