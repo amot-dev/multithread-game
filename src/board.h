@@ -7,6 +7,8 @@
 #include <cereal/archives/json.hpp>
 #include "tile.h"
 
+class Tile;
+
 /**
  * @brief Construct used to contain all data related to a path between two tiles
  * 
@@ -25,69 +27,18 @@ struct Path{
  * 
  */
 class Board{
-    /** The amount of the board that's viewed (and generated at once) */
+    /** The amount of the world that's viewed (and generated at once) */
     static const int viewSize = 21;
-    /** Map of coordinates to tiles, contains the board */
-    std::map<std::pair<int,int>, Tile> board;
-    /** Seed used in generation of the board */
+    /** Map of coordinates to tiles, contains the world */
+    std::map<std::pair<int,int>, Tile> world;
+    /** Seed used in generation of the world */
     int seed;
 
     /**
-     * @brief Generates the board on first load
+     * @brief Generates the world on first load
      * 
      */
     void generateBoard();
-
-    /**
-     * @brief Generate tile at the given coordinates
-     * 
-     * @param coordinates x,y pair of coordinates
-     */
-    void generateTile(std::pair<int, int> coordinates);
-
-    /**
-     * @brief Generates biome from the given coordinates
-     * 
-     * This function essentially generates biomes in "splotches".
-     * For a given coordinate, if there is no biome present,
-     * it checks direction it can generate a new biome into.
-     * It then moves in that direction a random amount (this
-     * amount is determined by min and max biome size), and
-     * generates a splotch a random number of tiles in each
-     * direction, ensuring to cover the original coordinates
-     * too.
-     * 
-     * @param coordinates x,y pair of coordinates
-     */
-    void generateBiome(std::pair<int, int> coordinates);
-
-    /**
-     * @brief Generates feature at the given coordinates
-     * 
-     * For most features this is straightForward. Cities however
-     * are multi-tile and will sometimes overwrite nearby features
-     * or even generate new tiles for the rest of the city
-     * to generate.
-     * 
-     * @param coordinates x,y pair of coordinates
-     */
-    void generateFeature(std::pair<int, int> coordinates);
-
-    /**
-     * @brief Check if the given coordinates contain a generated tile
-     * 
-     * @param coordinates x,y pair of coordinates
-     * @return Whether or not the specified coordinates contain a generated tile 
-     */
-    bool tileExists(std::pair<int,int> coordinates) const;
-
-    /**
-     * @brief Check if the given coordinates contain a ready tile
-     * 
-     * @param coordinates x,y pair of coordinates
-     * @return Whether or not the specified coordinates contain a ready tile 
-     */
-    bool tileReady(std::pair<int,int> coordinates) const;
 
     /**
      * @brief Implements travel cost comparison for tiles by coordinate
@@ -107,13 +58,13 @@ class Board{
 
 public:
     /**
-     * @brief Build new board centered at 0,0
+     * @brief Build new world centered at 0,0
      * 
      */
     Board();
 
     /**
-     * @brief Build new board with specified seed centered at 0,0
+     * @brief Build new world with specified seed centered at 0,0
      * 
      * @param seed Seed to use in generation
      */
@@ -135,7 +86,7 @@ public:
     void serialize(Archive& archive){
         archive(
             cereal::make_nvp("Seed",seed),
-            cereal::make_nvp("Board",board)
+            cereal::make_nvp("Board",world)
         );
     }
 
@@ -147,11 +98,19 @@ public:
     int getViewSize() const;
 
     /**
-     * @brief Get the board's seed
+     * @brief Get the world's seed
      * 
      * @return Board's seed
      */
     int getSeed() const;
+
+    /**
+     * @brief Check if the given coordinates contain a generated tile
+     * 
+     * @param coordinates x,y pair of coordinates
+     * @return Whether or not the specified coordinates contain a generated tile 
+     */
+    bool tileExists(std::pair<int,int> coordinates) const;
 
     /**
      * @brief Get the tile at the coordinates
@@ -162,10 +121,19 @@ public:
     Tile getTile(std::pair<int,int> coordinates) const;
 
     /**
-     * @brief Verify board integrity
+     * @brief Set the tile at the coordinates
+     * 
+     * @param coordinates Location of desired tile
+     * @param tile Tile to set
+     * @return Whether the tile was generated
+     */
+    bool setTile(std::pair<int,int> coordinates, Tile tile);
+
+    /**
+     * @brief Verify world integrity
      * 
      * @param position Position to verify around
-     * @return Whether or not the board is valid for play
+     * @return Whether or not the world is valid for play
      */
     bool verify(std::pair<int,int> position) const;
 

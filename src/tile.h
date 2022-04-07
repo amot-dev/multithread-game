@@ -3,6 +3,9 @@
 
 #include <map>
 #include <cereal/archives/json.hpp>
+#include "board.h"
+
+class Board;
 
 /**
  * @brief Defines some useful values used in tile generation
@@ -84,6 +87,10 @@ struct FeatureGen{
  * 
  */
 class Tile{
+    /** A pointer to the board the tile is on */
+    Board* board;
+    /** The coordinates of the tile */
+    std::pair<int,int> coordinates;
     /** The tile ready status. True when the tile is fully generated */
     bool ready;
     /** The biome at the tile */
@@ -101,11 +108,20 @@ public:
     Tile();
 
     /**
-     * @brief Create a new tile and set it to a biome
+     * @brief Create a new tile at the coordinates
      * 
+     * @param board The board the tile is on
+     * @param coordinates The location of the tile
+     */
+    Tile(Board* board, std::pair<int,int> coordinates);
+
+    /**
+     * @brief Create a new unfinished tile and set it to a biome
+     * 
+     * @param board The board the tile is on
      * @param biome The biome to initialize the tile with
      */
-    Tile(int biome);
+    Tile(Board* board, int biome);
 
     /**
      * @brief Allows serialization of Tile class
@@ -164,6 +180,31 @@ public:
      * @return Ready status
      */
     bool isReady() const;
+
+    /**
+     * @brief Generates biome around this tile
+     * 
+     * This function essentially generates biomes in "splotches".
+     * After setting the biome for the current tile, it checks
+     * which direction it can generate a new biome into. It
+     * then moves in that direction a random amount (this
+     * amount is determined by min and max biome size), and
+     * generates a splotch a random number of tiles in each
+     * direction, ensuring to cover the current tile too.
+     * 
+     */
+    void generateBiome();
+
+    /**
+     * @brief Generates feature at the given coordinates
+     * 
+     * For most features this is straightforward. Cities however
+     * are multi-tile and will sometimes overwrite nearby features
+     * or even generate new tiles for the rest of the city
+     * to generate.
+     * 
+     */
+    void generateFeature();
 };
 
 #endif

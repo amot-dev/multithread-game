@@ -9,15 +9,15 @@ class TileMissingException : public std::exception {
 };
 
 class InvalidBiomeFound : public std::exception {
-   const char* what() const noexcept override {return "Error: This board contains a biome that doesn't exist!";};
+   const char* what() const noexcept override {return "Error: This world contains a biome that doesn't exist!";};
 };
 
 class InvalidFeatureFound : public std::exception {
-   const char* what() const noexcept override {return "Error: This board contains a feature that doesn't exist!";};
+   const char* what() const noexcept override {return "Error: This world contains a feature that doesn't exist!";};
 };
 
 class InvalidBoardLoad : public std::exception {
-   const char* what() const noexcept override {return "Error: This board is not correctly generated!";};
+   const char* what() const noexcept override {return "Error: This world is not correctly generated!";};
 };
 
 #endif
